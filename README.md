@@ -1,2 +1,2 @@
 # cARds
-Technologies: OpenCV + Babylon.js + Blender + Tornado
+Technologies: OpenCV + Babylon.js + Blender + Socket.IO
