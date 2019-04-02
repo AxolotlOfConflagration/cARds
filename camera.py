@@ -2,10 +2,9 @@ import cv2
 
 
 
-capture = cv2.VideoCapture(1)
 
-while True:
-    ret, image = capture.read()
-    cv2.imshow('Camera stream', image)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+camera = cv2.VideoCapture(1)
+success, frame = camera.read()
+while success and cv2.waitKey(1) == -1 and ord('q'):
+    cv2.imshow('Stream', frame)
+    success, frame = camera.read()
