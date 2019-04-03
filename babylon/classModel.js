@@ -21,14 +21,6 @@ class ModelPreview {
 
     camera.setTarget(BABYLON.Vector3.Zero());
 
-    let light = new BABYLON.HemisphericLight(
-      "light1",
-      new BABYLON.Vector3(0, 1, 0),
-      this.scene
-    );
-
-    light.intensity = 1;
-
     let material = new BABYLON.StandardMaterial("material", this.scene);
     material.wireframe = true;
     this.model.material = material;
@@ -54,15 +46,21 @@ function sleep(ms) {
 }
 
 async function func(cube) {
+  let direction = "0 0 0 0 0 0";
+
   while (true) {
-    console.log("Taking a break...");
     await sleep(1000);
-    var direction = prompt("Podaj współrzędne", "0 0 0 0 0 0");
+    direction = prompt("Podaj współrzędne", direction);
 
     coord = direction.split(" ");
 
-    cube.position = [coord[0], coord[1], coord[2]];
-    cube.rotation = [coord[3], coord[4], coord[5]];
+    cube.position.x = coord[0];
+    cube.position.y = coord[1];
+    cube.position.z = coord[2];
+    cube.rotation.x = coord[3];
+    cube.rotation.y = coord[4];
+    cube.rotation.z = coord[5];
+    console.log(cube.position);
   }
 }
 
