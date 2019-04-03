@@ -12,9 +12,9 @@ app.config['DEBUG'] = True
 socketio = SocketIO(app)
 capture = cv.VideoCapture(0)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+# @app.route('/')
+# def index():
+#     return render_template('index.html')
 
 def connect():
     while True:
