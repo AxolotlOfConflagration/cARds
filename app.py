@@ -31,7 +31,7 @@ def send_coordinates():
                 eventlet.sleep(SLEEP_TIME)
 
 def stream_video():
-        c = CardRecognition()
+        c = CardRecognition(0)
         while True:
                 # _, frame = capture.read()
                 frame = c.create_cam_stream()
