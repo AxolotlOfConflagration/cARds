@@ -1,3 +1,4 @@
+from card_recognition.cam_stream import CardRecognition
 import cv2 as cv
 from flask import Flask, render_template, send_from_directory
 from flask_socketio import SocketIO, emit
@@ -11,7 +12,6 @@ app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
 
 socketio = SocketIO(app)
-capture = cv.VideoCapture(0)
 
 @app.route('/model/<path:path>')
 def serve_model(path):
@@ -31,8 +31,10 @@ def send_coordinates():
                 eventlet.sleep(SLEEP_TIME)
 
 def stream_video():
+        c = CardRecognition(0)
         while True:
-                _, frame = capture.read()
+                # _, frame = capture.read()
+                frame = c.create_cam_stream()
                 _, buffer = cv.imencode('.jpg', frame)
                 image = base64.b64encode(buffer).decode("utf-8") 
                 socketio.emit('image', image)

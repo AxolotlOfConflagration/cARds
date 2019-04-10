@@ -1,18 +1,25 @@
 import cv2
+<<<<<<< HEAD
 import numpy as np
+=======
+>>>>>>> 75dfc09feebac284b0c1bfc25cc1916d02b5919e
 
 class CardRecognition:
     def __init__(self, number=1):
         self.camera = cv2.VideoCapture(number)
+<<<<<<< HEAD
         self.bulbasaur = cv2.imread('./Bulbasaur.png', 0)
         self.charmander = cv2.imread('./Charmander.png', 0)
         self.pikachu = cv2.imread('./Pikachu.png', 0)
         self.squirtle = cv2.imread('./Squirtle.png', 0)
+=======
+>>>>>>> 75dfc09feebac284b0c1bfc25cc1916d02b5919e
 
     def create_cam_stream(self):
         self.success, self.frame = self.camera.read()
         return self.frame
 
+<<<<<<< HEAD
     def show_frame(self):
         while True:
             cv2.imshow("Stream", self.create_cam_stream())
@@ -62,6 +69,8 @@ class CardRecognition:
 
 
 
+=======
+>>>>>>> 75dfc09feebac284b0c1bfc25cc1916d02b5919e
 if __name__ == '__main__':
     cr = CardRecognition()
     cr.show_matcher()
