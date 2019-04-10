@@ -1,8 +1,8 @@
 import cv2
 
 class CardRecognition:
-    def __init__(self):
-        self.camera = cv2.VideoCapture(0)
+    def __init__(self, number=1):
+        self.camera = cv2.VideoCapture(number)
 
     def create_cam_stream(self):
         self.success, self.frame = self.camera.read()
