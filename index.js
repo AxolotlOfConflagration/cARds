@@ -19,7 +19,6 @@ class Scene {
     );
 
     camera.setTarget(BABYLON.Vector3.Zero());
-    camera.attachControl(this.canvas, true);
 
     let light = new BABYLON.HemisphericLight(
       "light1",
@@ -27,7 +26,7 @@ class Scene {
       this.scene
     );
 
-    light.intensity = 1;
+    light.intensity = 3;
   }
 
   async render() {
@@ -46,18 +45,13 @@ class Scene {
     BABYLON.SceneLoader.ImportMesh(
       "Suzanne",
       "Assets/",
-      "suzan.babylon",
+      "suzan_anim.babylon",
       this.scene,
-      (meshes, particleSystems) => {
+      (meshes, particleSystems, skeletons) => {
         this.objects.suzane = meshes[0];
-
-        this.scene.registerBeforeRender(() => {
-            for (let i = 0; i < 360; i+= 0.001) {
-                i = i % 360;
-                let mesh = this.objects.suzane;
-                if (mesh) mesh.rotate(BABYLON.Axis.Y, i, BABYLON.Space.LOCAL);
-              }
-        })
+        this.objects.suzane.position.y = -1;
+        
+        this.scene.beginAnimation(skeletons[0], 0, 180, true, 1.0);
       }
     );
   }
