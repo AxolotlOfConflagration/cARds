@@ -31,22 +31,6 @@ class ModelPreview {
   }
 
   loadSuzan() {
-    // let assetsManager = new BABYLON.AssetsManager(this.scene);
-    // let meshTask = assetsManager.addMeshTask(
-    //   "Suzanne Task",
-    //   "Suzane",
-    //   "static/models/",
-    //   "suzane_anim.babylon"
-    // );
-    
-    // meshTask.onSuccess = task => {
-    //   console.log("PLIS DZIAŁAJ");
-    //   console.log(task.loadedMeshes[0])
-    //   task.loadedMeshes[0].position = BABYLON.Vector3.Zero();
-    // };
-
-    // assetsManager.load();
-
     BABYLON.SceneLoader.ImportMesh(
       "",
       "static/models/", //TODO change path
