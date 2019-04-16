@@ -2,6 +2,7 @@ from card_recognition.cam_stream import CardRecognition
 import cv2 as cv
 from flask import Flask, render_template, send_from_directory
 from flask_socketio import SocketIO, emit
+from flask_cors import CORS
 import eventlet, base64, json, random, time
 eventlet.monkey_patch()
 
@@ -10,6 +11,8 @@ SLEEP_TIME = 0.1
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
+
+CORS(app)
 
 socketio = SocketIO(app)
 
