@@ -26,6 +26,21 @@ class ModelPreview {
     this.model.material = material;
   }
 
+  loadSuzan() {
+    BABYLON.SceneLoader.ImportMesh(
+      "Suzanne",
+      "../models/", //TODO change path
+      "suzan_anim.babylon",
+      this.scene,
+      (meshes, particleSystems, skeletons) => {
+        this.objects.suzane = meshes[0];
+        this.objects.suzane.position.y = -1;
+        
+        this.scene.beginAnimation(skeletons[0], 0, 180, true, 1.0);
+      }
+    );
+  }
+
   render() {
     this.engine.runRenderLoop(() => {
       if (this.scene) {
@@ -39,6 +54,7 @@ class ModelPreview {
 }
 
 let preview = new ModelPreview();
+preview.loadSuzan()
 preview.render();
 
 function sleep(ms) {
