@@ -8,7 +8,7 @@ eventlet.monkey_patch()
 
 SLEEP_TIME = 0.1
 
-app = Flask(__name__, static_url_path='')
+app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 app.config['DEBUG'] = True
 
@@ -16,9 +16,13 @@ CORS(app)
 
 socketio = SocketIO(app)
 
-@app.route('/model/<path:path>')
+@app.route('/')
+def index():
+        return render_template('modelShowcase.html', title='<3 C++ <3')
+
+@app.route('/<path:path>')
 def serve_model(path):
-        return send_from_directory('models', path)
+        return send_from_directory('.', path)
 
 from itertools import cycle
 

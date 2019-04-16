@@ -20,10 +20,46 @@ class ModelPreview {
     );
 
     camera.setTarget(BABYLON.Vector3.Zero());
+    
+    let light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(0, 0, 100), this.scene);
+    light.intensity = 2.4;
+    light.range = 100;
 
     let material = new BABYLON.StandardMaterial("material", this.scene);
     material.wireframe = true;
     this.model.material = material;
+  }
+
+  loadSuzan() {
+    // let assetsManager = new BABYLON.AssetsManager(this.scene);
+    // let meshTask = assetsManager.addMeshTask(
+    //   "Suzanne Task",
+    //   "Suzane",
+    //   "static/models/",
+    //   "suzane_anim.babylon"
+    // );
+    
+    // meshTask.onSuccess = task => {
+    //   console.log("PLIS DZIAŁAJ");
+    //   console.log(task.loadedMeshes[0])
+    //   task.loadedMeshes[0].position = BABYLON.Vector3.Zero();
+    // };
+
+    // assetsManager.load();
+
+    BABYLON.SceneLoader.ImportMesh(
+      "",
+      "static/models/", //TODO change path
+      "suzane_anim.babylon",
+      this.scene,
+      (meshes, particleSystems, skeletons) => {
+        meshes[0].position.z = 90;
+        meshes[0].position.y = -2;
+        meshes[0].position.x = -5;
+        meshes[0].rotate(BABYLON.Axis.Y, Math.PI * 5/4, BABYLON.Space.WORLD);
+        this.scene.beginAnimation(skeletons[0], 0, 180, true, 1.0);
+      }
+    );
   }
 
   render() {
@@ -39,6 +75,7 @@ class ModelPreview {
 }
 
 let preview = new ModelPreview();
+preview.loadSuzan();
 preview.render();
 
 function sleep(ms) {
@@ -60,7 +97,7 @@ async function func(cube) {
     cube.rotation.x = coord[3];
     cube.rotation.y = coord[4];
     cube.rotation.z = coord[5];
-    console.log(cube.position);
+    // console.log(cube.position);
   }
 }
 
@@ -69,12 +106,12 @@ function moveModel(model, coordinates) {}
 var socket = io.connect("http://localhost:5000");
 socket.on("coordinates", coordinates => {
   coords = JSON.parse(coordinates);
-  console.log("x: ", coords.x);
-  console.log("y: ", coords.y);
-  console.log("z: ", coords.z);
-  console.log("rx: ", coords.rx);
-  console.log("ry: ", coords.ry);
-  console.log("rz: ", coords.rz);
+  // console.log("x: ", coords.x);
+  // console.log("y: ", coords.y);
+  // console.log("z: ", coords.z);
+  // console.log("rx: ", coords.rx);
+  // console.log("ry: ", coords.ry);
+  // console.log("rz: ", coords.rz);
   preview.model.position.x = coords.x;
   preview.model.position.y = coords.y;
   preview.model.position.z = coords.z;

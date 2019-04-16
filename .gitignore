@@ -4,6 +4,14 @@
 # Created by https://www.gitignore.io/api/c++,node,python,pycharm,intellij,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=c++,node,python,pycharm,intellij,visualstudiocode
 
+.vscode/
+
+Assets/
+Assets/References
+Assets/Textures/*.xfc
+*.blend*
+*.log
+
 ### C++ ###
 # Prerequisites
 *.d
