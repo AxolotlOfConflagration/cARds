@@ -6,6 +6,7 @@
 
 .vscode/
 
+Assets/
 Assets/References
 Assets/Textures/*.xfc
 *.blend*
