@@ -17,18 +17,24 @@ socketio = SocketIO(app)
 def serve_model(path):
         return send_from_directory('models', path)
 
+from itertools import cycle
+
 def send_coordinates():
+        tab = cycle([i for i in range(-20, 20)])
+        nextelem = next(tab)
         while True:
-                randoms = [random.randint(0, 100) for p in range(0, 6)]
-                socketio.emit('coordinates', json.dumps({
+                thiselem, nextelem = nextelem, next(tab)
+                randoms = [random.randint(0, 20) for p in range(0, 4)]
+                jsonV = json.dumps({
                         'id': 1,
-                        'x': randoms[0],
-                        'y': randoms[1],
-                        'z': randoms[2],
-                        'rx': randoms[3],
-                        'ry': randoms[4],
-                        'rz': randoms[5]
-                        }))
+                        'x': thiselem,
+                        'y': nextelem,
+                        'z': randoms[0],
+                        'rx': randoms[1],
+                        'ry': randoms[2],
+                        'rz': randoms[3]
+                        })
+                socketio.emit('coordinates', jsonV)
                 eventlet.sleep(SLEEP_TIME)
 
 def stream_video():
