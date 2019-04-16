@@ -2,7 +2,7 @@ from card_recognition.cam_stream import CardRecognition
 import cv2 as cv
 from flask import Flask, render_template, send_from_directory
 from flask_socketio import SocketIO, emit
-import eventlet, base64, json
+import eventlet, base64, json, random, time
 eventlet.monkey_patch()
 
 SLEEP_TIME = 0.1
@@ -19,21 +19,21 @@ def serve_model(path):
 
 def send_coordinates():
         while True:
+                randoms = [random.randint(0, 100) for p in range(0, 6)]
                 socketio.emit('coordinates', json.dumps({
                         'id': 1,
-                        'x': 1,
-                        'y': 1,
-                        'z': 1,
-                        'rx': 0,
-                        'ry': 0,
-                        'rz': 0
+                        'x': randoms[0],
+                        'y': randoms[1],
+                        'z': randoms[2],
+                        'rx': randoms[3],
+                        'ry': randoms[4],
+                        'rz': randoms[5]
                         }))
                 eventlet.sleep(SLEEP_TIME)
 
 def stream_video():
         c = CardRecognition(0)
         while True:
-                # _, frame = capture.read()
                 frame = c.create_cam_stream()
                 _, buffer = cv.imencode('.jpg', frame)
                 image = base64.b64encode(buffer).decode("utf-8") 
