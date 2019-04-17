@@ -1,6 +1,6 @@
 from card_recognition.cam_stream import CardRecognition
-import cv2 as cv
 from flask import Flask, render_template, send_from_directory
+import cv2 as cv
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import eventlet, base64, json, random, time

@@ -16,9 +16,9 @@ class CardRecognition:
 
     def matcher(self):
         frame = self.create_cam_stream()
-        detector = cv2.QRCodeDetector()
-        data, points, straight_qrcode = detector.detectAndDecode(frame)
-        print(data)
+        # detector = cv2.QRCodeDetector()
+        # data, points, straight_qrcode = detector.detectAndDecode(frame)
+        # print(data)
         MIN_MATCHES = 20
         #####################################################################
         # Initiate SIFT detector #
