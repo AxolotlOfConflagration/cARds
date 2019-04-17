@@ -1,5 +1,4 @@
 import cv2
-
 import numpy as np
 
 
@@ -11,7 +10,6 @@ class CardRecognition:
         self.charmander = cv2.imread('./Charmander.png', 0)
         self.pikachu = cv2.imread('./Pikachu.png', 0)
         self.squirtle = cv2.imread('./Squirtle.png', 0)
-
 
     def create_cam_stream(self):
         self.success, self.frame = self.camera.read()
@@ -162,3 +160,4 @@ class CardRecognition:
 if __name__ == '__main__':
     cr = CardRecognition(1)
     cr.print_matcher()
+
