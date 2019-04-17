@@ -47,7 +47,7 @@ def send_coordinates():
 def stream_video():
         c = CardRecognition(0)
         while True:
-                frame = c.create_cam_stream()
+                frame = c.matcher()
                 _, buffer = cv.imencode('.jpg', frame)
                 image = base64.b64encode(buffer).decode("utf-8") 
                 socketio.emit('image', image)

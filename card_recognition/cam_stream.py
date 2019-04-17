@@ -6,10 +6,10 @@ class CardRecognition:
     def __init__(self, number):
         self.camera = cv2.VideoCapture(number)
 
-        self.bulbasaur = cv2.imread('./Bulbasaur.png', 0)
-        self.charmander = cv2.imread('./Charmander.png', 0)
-        self.pikachu = cv2.imread('./Pikachu.png', 0)
-        self.squirtle = cv2.imread('./Squirtle.png', 0)
+        self.bulbasaur = cv2.imread('card_recognition//Bulbasaur.png', 0)
+        self.charmander = cv2.imread('card_recognition//Charmander.png', 0)
+        self.pikachu = cv2.imread('card_recognition/Pikachu.png', 0)
+        self.squirtle = cv2.imread('card_recognition//Squirtle.png', 0)
 
     def create_cam_stream(self):
         self.success, self.frame = self.camera.read()
