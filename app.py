@@ -6,7 +6,7 @@ from flask_cors import CORS
 import eventlet, base64, json, random, time
 eventlet.monkey_patch()
 
-SLEEP_TIME = 0.1
+SLEEP_TIME = 0.00001
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -57,4 +57,4 @@ eventlet.spawn(stream_video)
 eventlet.spawn(send_coordinates)
 
 if __name__ == '__main__':
-        socketio.run(app, use_reloader=False)
+        socketio.run(app, use_reloader=False, port=6969)
