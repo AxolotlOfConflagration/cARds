@@ -1,6 +1,6 @@
 from card_recognition.cam_stream import CardRecognition
-import cv2 as cv
 from flask import Flask, render_template, send_from_directory
+import cv2 as cv
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import eventlet, base64, json, random, time
@@ -47,7 +47,7 @@ def send_coordinates():
 def stream_video():
         c = CardRecognition(0)
         while True:
-                frame = c.create_cam_stream()
+                frame = c.matcher()
                 _, buffer = cv.imencode('.jpg', frame)
                 image = base64.b64encode(buffer).decode("utf-8") 
                 socketio.emit('image', image)

@@ -1,9 +1,11 @@
 import cv2
 import numpy as np
+
 import glob
 import cv2.aruco as aruco
 import os
 import json
+
 
 class CardRecognition:
     def __init__(self, number):
@@ -13,8 +15,7 @@ class CardRecognition:
         self.pikachu = 2
         self.squirtle = 1
         self.path = os.path.realpath('CameraCalibration/img/*.bmp').replace("\\", "/")
-
-
+        
     def create_cam_stream(self):
         self.success, self.frame = self.camera.read()
         return self.frame
@@ -164,3 +165,5 @@ if __name__ == '__main__':
 
     #cr.write_cam_parameters_to_file()
     #print(cr.get_camera_parameters_from_file())
+
+
