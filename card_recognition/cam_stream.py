@@ -14,14 +14,9 @@ class CardRecognition:
         self.charmander = 0
         self.pikachu = 2
         self.squirtle = 1
-<<<<<<< HEAD
-        self.path = os.path.realpath('card_recognition/CameraCalibration/img/*.bmp').replace("\\", "/")
 
-
-=======
         self.path = os.path.realpath('CameraCalibration/img/*.bmp').replace("\\", "/")
-        
->>>>>>> 2478e85ec4986480b67b3afcede85414401abfd8
+
     def create_cam_stream(self):
         self.success, self.frame = self.camera.read()
         return self.frame
