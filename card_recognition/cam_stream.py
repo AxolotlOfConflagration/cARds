@@ -12,7 +12,7 @@ class CardRecognition:
         self.charmander = 0
         self.pikachu = 2
         self.squirtle = 1
-        self.path = os.path.realpath('CameraCalibration/img/*.bmp').replace("\\", "/")
+        self.path = os.path.realpath('card_recognition/CameraCalibration/img/*.bmp').replace("\\", "/")
 
 
     def create_cam_stream(self):
@@ -158,8 +158,8 @@ class CardRecognition:
 
 if __name__ == '__main__':
     cr = CardRecognition(1)
-    cr.show_asix()
-    #cr.test_cor_ror_tran()
+    #cr.show_asix()
+    cr.test_cor_ror_tran()
 
 
     #cr.write_cam_parameters_to_file()
