@@ -145,13 +145,16 @@ class CardRecognition:
             corners, ids = self.detect_aruco(frame)
 
             rvec, tvec = self.get_rotation_and_translation(corners,camera_matrix, dist_coeffs)
+
+
+
             try:
                 if len(rvec>0):
                     for i in range(0, len(rvec)):
                         cv2.aruco.drawAxis(frame, camera_matrix, dist_coeffs, rvec[i], tvec[i], 10)
-                    cv2.imshow('test2', frame)
             except:
                 pass
+            cv2.imshow('test2', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
