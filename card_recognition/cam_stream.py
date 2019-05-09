@@ -15,7 +15,7 @@ class CardRecognition:
         self.pikachu = 2
         self.squirtle = 1
 
-        self.path = os.path.realpath('CameraCalibration/img/*.bmp').replace("\\", "/")
+        self.path = os.path.realpath('card_recognition/CameraCalibration/img/*.bmp').replace("\\", "/")
 
     def create_cam_stream(self):
         self.success, self.frame = self.camera.read()
@@ -42,7 +42,7 @@ class CardRecognition:
         imgpoints = []  # 2d points in image plane.
 
         for fname in glob.glob(self.path):
-
+            print(fname)
             img = cv2.imread(fname)
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -100,7 +100,7 @@ class CardRecognition:
 
     def get_rotation_and_translation(self,corners,camera_matrix, dist_coeffs, markerLength = 25):
 
-        rvec, tvec = aruco.estimatePoseSingleMarkers(corners, markerLength, camera_matrix, dist_coeffs)
+        rvec, tvec, _ = aruco.estimatePoseSingleMarkers(corners, markerLength, camera_matrix, dist_coeffs)
 
         return rvec, tvec
 
