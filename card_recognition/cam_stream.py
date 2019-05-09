@@ -111,6 +111,7 @@ class CardRecognition:
             camera_matrix, dist_coeffs = self.get_camera_parameters_from_file()
         return  camera_matrix, dist_coeffs
     def get_corners_and_rortation_and_translation(self, frame):
+
         # objpoints, imgpoints, gray = self.calibrantion_cam_1()
         # camera_matrix, dist_coeffs = self.get_cam_matrix(objpoints, imgpoints, gray)
         camera_matrix, dist_coeffs = self.get_camera_parameters()
