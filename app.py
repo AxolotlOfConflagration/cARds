@@ -56,7 +56,7 @@ from itertools import cycle
         # socketio.emit('coordinates', jsonV)
 
 def stream_video():
-        c = CardRecognition(0)
+        c = CardRecognition(0) # For external camer set to 1
         while True:
                 frame = c.create_cam_stream()
                 _, buffer = cv.imencode('.jpg', frame)
@@ -66,9 +66,9 @@ def stream_video():
                 if type(rvec).__module__ == np.__name__:
                         jsonV = json.dumps({
                         'id': 1,
-                        'x': tvec[0][0][0],
-                        'y': tvec[0][0][1],
-                        'z': tvec[0][0][2],
+                        'tx': tvec[0][0][0],
+                        'ty': tvec[0][0][1],
+                        'tz': tvec[0][0][2],
                         'rx': rvec[0][0][0],
                         'ry': rvec[0][0][1],
                         'rz': rvec[0][0][2]

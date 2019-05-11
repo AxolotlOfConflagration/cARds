@@ -15,7 +15,8 @@ class CardRecognition:
         self.pikachu = 2
         self.squirtle = 1
 
-        self.path = os.path.realpath('card_recognition/CameraCalibration/img/*.bmp').replace("\\", "/")
+        self.path = os.path.realpath('CameraCalibration/img/*.bmp').replace("\\", "/")
+        # self.path = os.path.realpath('card_recognition/CameraCalibration/img/*.bmp').replace("\\", "/")
 
     def create_cam_stream(self):
         self.success, self.frame = self.camera.read()
@@ -148,9 +149,11 @@ class CardRecognition:
                 if len(rvec>0):
                     for i in range(0, len(rvec)):
                         cv2.aruco.drawAxis(frame, camera_matrix, dist_coeffs, rvec[i], tvec[i], 10)
-                    cv2.imshow('test2', frame)
+                    # cv2.imshow('test2', frame)
             except:
                 pass
+            
+            cv2.imshow('test2', frame)            
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
@@ -159,10 +162,9 @@ class CardRecognition:
 
 
 if __name__ == '__main__':
-    cr = CardRecognition(1)
-    #cr.show_asix()
-    cr.test_cor_ror_tran()
-
+    cr = CardRecognition(0)
+    cr.show_asix()
+    # cr.test_cor_ror_tran()
 
     #cr.write_cam_parameters_to_file()
     #print(cr.get_camera_parameters_from_file())
