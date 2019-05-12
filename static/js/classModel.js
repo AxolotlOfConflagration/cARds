@@ -24,7 +24,11 @@ class ModelPreview {
 
     camera.setTarget(BABYLON.Vector3.Zero());
 
-    let light = new BABYLON.PointLight("pointLight", new BABYLON.Vector3(0, 0, 250), this.scene);
+    let light = new BABYLON.PointLight(
+      "pointLight",
+      new BABYLON.Vector3(0, 0, 250),
+      this.scene
+    );
     light.intensity = 5;
     light.range = 400;
 
@@ -100,17 +104,14 @@ async function func(cube) {
   }
 }
 
-function moveModel(model, coordinates) { }
+function moveModel(model, coordinates) {}
 
 var socket = io.connect("http://localhost:5000");
 socket.on("coordinates", coordinates => {
   coords = JSON.parse(coordinates);
-  // console.log("x: ", coords.x);
-  // console.log("y: ", coords.y);
-  // console.log("z: ", coords.z);
-  // console.log("rx: ", coords.rx);
-  // console.log("ry: ", coords.ry);
-  // console.log("rz: ", coords.rz);
+
+  console.log("Aruco x: ", coords.tx);
+  console.log("Aruco y: ", coords.ty);
   // preview.model.position.x = coords.tx;
   // preview.model.position.y = coords.ty;
   // preview.model.position.z = coords.tz;
@@ -119,6 +120,10 @@ socket.on("coordinates", coordinates => {
   // preview.model.rotation.z = coords.rz;
   moveObjWithAruco(preview.suzane, coords);
 });
+
+function translateX(x_coords) {
+  return -0.2 * x_coords - 4;
+}
 
 function moveObjWithAruco(obj, coords) {
   let ftx = MIRROR_AR ? -coords.tx : coords.tx;
@@ -135,14 +140,19 @@ function moveObjWithAruco(obj, coords) {
   let theta = rot.length();
   rot.scaleInPlace(1.0 / theta);
   if (theta !== 0.0) {
-      let quat = BABYLON.Quaternion.RotationAxis(rot, theta);
-      console.log(obj);
-      obj.rotationQuaternion = BABYLON.Quaternion.Slerp(obj.rotationQuaternion, quat, 1.0 - FILTER_STRENGTH);
+    let quat = BABYLON.Quaternion.RotationAxis(rot, theta);
+    console.log(obj);
+    obj.rotationQuaternion = BABYLON.Quaternion.Slerp(
+      obj.rotationQuaternion,
+      quat,
+      1.0 - FILTER_STRENGTH
+    );
   }
 
-  obj.position.x *= FILTER_STRENGTH;
-  obj.position.x += (1.0 - FILTER_STRENGTH) * ftx;
-  // console.log("x:", obj.position.x)
+  // obj.position.x *= FILTER_STRENGTH;
+  // obj.position.x += (1.0 - FILTER_STRENGTH) * ftx;
+  obj.position.x = translateX(parseFloat(coords.tx));
+
   obj.position.y *= FILTER_STRENGTH;
   obj.position.y += (1.0 - FILTER_STRENGTH) * fty;
   // console.log("y:", obj.position.y)
@@ -153,14 +163,10 @@ function moveObjWithAruco(obj, coords) {
   // obj.position.x = (-ftx)/50*40;
   // console.log("fty:", )
 
-
-
   // const Z_STRENGHT = 0.1
   // console.log("ftz:",1/ftz*35000)
   // obj.position.x = 0
   // obj.position.y = 0
-  obj.position.z = 1/ftz*3000
+  obj.position.z = (1 / ftz) * 3000;
   // console.log("z:", obj.position.z)
 }
-
-//func(preview.model);
