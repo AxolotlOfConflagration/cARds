@@ -1,5 +1,6 @@
 # vscode
 .vscode/
+**/test_env/*
 
 # Created by https://www.gitignore.io/api/c++,node,python,pycharm,intellij,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=c++,node,python,pycharm,intellij,visualstudiocode
