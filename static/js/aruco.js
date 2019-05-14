@@ -1,7 +1,11 @@
 const MIRROR_AR = false;
 const ARUCO_MODULE_NAME = "acuroModule";
 const ARUCO_MODULE_LOCATION = "https://syntheticmagus.github.io/webpiled-aruco-ar/v0.01/webpiled-aruco-ar.js";
-const FILTER_STRENGTH = 0.4;
+const FILTER_STRENGTH = 0.2;
+
+const CHARMANDER_ID = 0;
+const PIKACHU_ID = 2;
+const BULBASAUR_ID = 3;
 
 class ModelPreview {
     constructor() {
@@ -13,6 +17,8 @@ class ModelPreview {
 
         this.scene = new BABYLON.Scene(this.engine);
         this.scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
+        this.models = {};
+        this.framesSinceSeen = {};
         this.fillScene();
     }
 
@@ -39,82 +45,53 @@ class ModelPreview {
         this.material = material;
     }
 
-    loadSuzan() {
+    prepareMesh(meshId) {
+        let mesh = this.models[meshId];
+        mesh.rotationQuaternion = BABYLON.Quaternion.Identity();
+        mesh.position.z = 10;
+        mesh.position.y = meshId * 2;
+    }
+
+    loadMeshes() {
         BABYLON.SceneLoader.ImportMesh(
             "",
             "static/models/", //TODO change path
-            "suzane_anim.babylon",
+            "all_pokemons.babylon",
             this.scene,
             (meshes, particleSystems, skeletons) => {
-                let suzzane = meshes[0];
-                suzzane.position.z = 10;
-                suzzane.position.y = -2;
-                // suzzane.position.x = -5;
-                // suzzane.rotate(BABYLON.Axis.Y, Math.PI * 5 / 4, BABYLON.Space.WORLD);
                 this.scene.beginAnimation(skeletons[0], 0, 180, true, 1.0);
-                suzzane.rotationQuaternion = BABYLON.Quaternion.Identity();
-                this.suzzane = suzzane;
+
+                meshes.forEach(mesh => {
+                    console.log(mesh.id)
+                    switch (mesh.id) {
+                        case "Charmander":
+                            this.models[CHARMANDER_ID] = mesh;
+                            this.prepareMesh(CHARMANDER_ID)
+                            break;
+                        case "Pikachu":
+                            this.models[PIKACHU_ID] = mesh;
+                            this.prepareMesh(PIKACHU_ID);
+                            break;
+                        case "Bulbasaur":
+                            this.models[BULBASAUR_ID] = mesh;
+                            this.prepareMesh(BULBASAUR_ID);
+                            break;
+                    }
+                });
 
                 BABYLON.VideoTexture.CreateFromWebCam(this.scene, (videoTexture) => {
                     this.material.diffuseTexture = videoTexture;
-                    
+
                     ensureAruco();
                     setTimeout(() => {
                         Module._reset();
 
-                        let ftx = 0.0;
-                        let fty = 0.0;
-                        let ftz = 0.0;
-                        let frx = 0.0;
-                        let fry = 0.0;
-                        let frz = 0.0;
-                        let framesSinceSeen = 0;
-
                         this.scene.onAfterRenderObservable.add(() => {
-                            let numMarkers = findMarkersInImage(videoTexture, (id, tx, ty, tz, rx, ry, rz) => {
-                                console.log("id:", id)
-
-                                ftx = MIRROR_AR ? - tx : tx;
-                                fty = - ty;
-                                ftz = tz;
-
-                                frx = rx;
-                                fry = ry;
-                                frx = rz;
-                            });
-
-                            let rot = new BABYLON.Vector3(-frx, fry, -frz);
-                            let theta = rot.length();
-                            rot.scaleInPlace(1.0 / theta);
-                            if (theta !== 0.0) {
-                                let quat = BABYLON.Quaternion.RotationAxis(rot, theta);
-                                this.suzzane.rotationQuaternion = BABYLON.Quaternion.Slerp(this.suzzane.rotationQuaternion, quat, 1.0 - FILTER_STRENGTH);
-                            }
-
-                            if (numMarkers === 0) {
-                                framesSinceSeen += 1;
-                            }
-                            else {
-                                framesSinceSeen = 0;
-                            }
-
-                            this.suzzane.position.x *= FILTER_STRENGTH;
-                            this.suzzane.position.x += (1.0 - FILTER_STRENGTH) * ftx;
-                            this.suzzane.position.y *= FILTER_STRENGTH;
-                            this.suzzane.position.y += (1.0 - FILTER_STRENGTH) * fty;
-                            this.suzzane.position.z *= FILTER_STRENGTH;
-                            this.suzzane.position.z += (1.0 - FILTER_STRENGTH) * ftz;
-
-                            if (framesSinceSeen < 10 || Math.abs(this.suzzane.position.x - ftx) > 0.01) {
-                                this.suzzane.visibility = 1;
-                            }
-                            else {
-                                this.suzzane.visibility = 0;
-                            }
+                            findMarkersInImage(videoTexture, this.models, this.framesSinceSeen, translateRotateMesh);
                         });
 
                     }, 2000);
-                }, { maxWidth: 640*2, maxHeight: 480*2 });
+                }, { maxWidth: 640 * 2, maxHeight: 480 * 2 });
             }
         );
     }
@@ -132,7 +109,7 @@ class ModelPreview {
 }
 
 let preview = new ModelPreview();
-preview.loadSuzan();
+preview.loadMeshes();
 preview.render();
 
 function sleep(ms) {
@@ -141,45 +118,97 @@ function sleep(ms) {
 
 function ensureAruco() {
     if (document.getElementById(ARUCO_MODULE_NAME) === null) {
-        var moduleScript = document.createElement("script");
+        let moduleScript = document.createElement("script");
         moduleScript.id = ARUCO_MODULE_NAME;
         moduleScript.src = ARUCO_MODULE_LOCATION;
         document.body.appendChild(moduleScript);
     }
 }
 
-function findMarkersInImage(videoTexture, callback) {
-    var width = videoTexture.getSize().width;
-    var height = videoTexture.getSize().height;
-    var imageData = videoTexture.readPixels();
+function findMarkersInImage(videoTexture, meshes, framesSinceSeen, callback) {
+    let width = videoTexture.getSize().width;
+    let height = videoTexture.getSize().height;
+    let imageData = videoTexture.readPixels();
 
-    var buf = Module._malloc(imageData.length * imageData.BYTES_PER_ELEMENT);
+    let buf = Module._malloc(imageData.length * imageData.BYTES_PER_ELEMENT);
     Module.HEAPU8.set(imageData, buf);
-    var numMarkers = Module._process_image(width, height, buf, 1);
+    let numMarkers = Module._process_image(width, height, buf, 1);
     Module._free(buf);
 
-    for (var markerIdx = 0; markerIdx < numMarkers; markerIdx++) {
-        var ptr = Module._get_tracked_marker(0);
+    for (let key in framesSinceSeen) {
+        if (!framesSinceSeen[key]) {
+            framesSinceSeen[key] = 0;
+        }
+        framesSinceSeen[key] += 1;
+    }
 
-        var offset = 0;
-        var id = Module.getValue(ptr + offset, "i32");
+    for (let markerIdx = 0; markerIdx < numMarkers; markerIdx++) {
+        let ptr = Module._get_tracked_marker(markerIdx);
+
+        let t = new BABYLON.Vector3();
+        let r = new BABYLON.Vector3();
+
+        let offset = 0;
+        let id = Module.getValue(ptr + offset, "i32");
         offset += 12;
-        var tx = Module.getValue(ptr + offset, "double");
-        offset += 8;
-        var ty = Module.getValue(ptr + offset, "double");
-        offset += 8;
-        var tz = Module.getValue(ptr + offset, "double");
-        offset += 8;
-        var rx = Module.getValue(ptr + offset, "double");
-        offset += 8;
-        var ry = Module.getValue(ptr + offset, "double");
-        offset += 8;
-        var rz = Module.getValue(ptr + offset, "double");
 
-        if (callback) {
-            callback(id, tx, ty, tz, rx, ry, rz);
+        t.x = Module.getValue(ptr + offset, "double");
+        offset += 8;
+        t.y = Module.getValue(ptr + offset, "double");
+        offset += 8;
+        t.z = Module.getValue(ptr + offset, "double");
+        offset += 8;
+
+        r.x = Module.getValue(ptr + offset, "double");
+        offset += 8;
+        r.y = Module.getValue(ptr + offset, "double");
+        offset += 8;
+        r.z = Module.getValue(ptr + offset, "double");
+
+        let mesh = meshes[id];
+
+        if (callback && mesh) {
+            framesSinceSeen[id] = 0;
+            callback(id, framesSinceSeen[id], mesh, t, r);
+            mesh.visibility = 1;
+        }
+    }
+
+    for (let key in framesSinceSeen) {
+        let frames = framesSinceSeen[key];
+        if (frames > 10 && meshes[key]) {
+            meshes[key].visibility = 0;
         }
     }
 
     return numMarkers;
+}
+
+function translateRotateMesh(id, framesSinceSeen, mesh, t, r) {
+    let ftx = MIRROR_AR ? - t.x : t.x;
+    let fty = -t.y;
+    let ftz = t.z;
+    let frx = r.x;
+    let fry = r.y;
+    let frz = r.z;
+
+    let rot = new BABYLON.Vector3(-frx, fry, -frz);
+    let theta = rot.length();
+    rot.scaleInPlace(1.0 / theta);
+    if (theta !== 0.0) {
+        let quat = BABYLON.Quaternion.RotationAxis(rot, theta);
+        mesh.rotationQuaternion = BABYLON.Quaternion.Slerp(mesh.rotationQuaternion, quat, 1.0 - FILTER_STRENGTH);
+        mesh.rotate(BABYLON.Axis.X, Math.PI / 2, BABYLON.Space.LOCAL);
+    }
+
+    mesh.position.x *= FILTER_STRENGTH;
+    mesh.position.x += (1.0 - FILTER_STRENGTH) * ftx;
+    mesh.position.y *= FILTER_STRENGTH;
+    mesh.position.y += (1.0 - FILTER_STRENGTH) * fty;
+    mesh.position.z *= FILTER_STRENGTH;
+    mesh.position.z += (1.0 - FILTER_STRENGTH) * ftz;
+
+    if (framesSinceSeen < 10, Math.abs(mesh.position.x - ftx) > 0.01) {
+        mesh.visibility = 1;
+    }
 }
