@@ -25,35 +25,36 @@ def index():
 def serve_model(path):
         return send_from_directory('.', path)
 
+
 from itertools import cycle
 
 # def send_coordinates(rvec, tvec):
-        # tab = cycle([i for i in range(-20, 20)])
-        # nextelem = next(tab)
-        # while True:
-        #         thiselem, nextelem = nextelem, next(tab)
-        #         randoms = [random.randint(0, 20) for p in range(0, 4)]
-        #         jsonV = json.dumps({
-        #                 'id': 1,
-        #                 'x': thiselem,
-        #                 'y': nextelem,
-        #                 'z': randoms[0],
-        #                 'rx': randoms[1],
-        #                 'ry': randoms[2],
-        #                 'rz': randoms[3]
-        #                 })
-        #         socketio.emit('coordinates', jsonV)
-        #         eventlet.sleep(SLEEP_TIME)
-        # jsonV = json.dumps({
-        #         'id': 1,
-        #         'x': tvec[0][0][0],
-        #         'y': tvec[0][0][1],
-        #         'z': tvec[0][0][2],
-        #         'rx': rvec[0][0][0],
-        #         'ry': rvec[0][0][1],
-        #         'rz': rvec[0][0][2]
-        # })
-        # socketio.emit('coordinates', jsonV)
+#         tab = cycle([i for i in range(-20, 20)])
+#         nextelem = next(tab)
+#         while True:
+#                 thiselem, nextelem = nextelem, next(tab)
+#                 randoms = [random.randint(0, 20) for p in range(0, 4)]
+#                 jsonV = json.dumps({
+#                         'id': 1,
+#                         'x': thiselem,
+#                         'y': nextelem,
+#                         'z': randoms[0],
+#                         'rx': randoms[1],
+#                         'ry': randoms[2],
+#                         'rz': randoms[3]
+#                         })
+#                 socketio.emit('coordinates', jsonV)
+#                 eventlet.sleep(SLEEP_TIME)
+#         jsonV = json.dumps({
+#                 'id': 1,
+#                 'x': tvec[0][0][0],
+#                 'y': tvec[0][0][1],
+#                 'z': tvec[0][0][2],
+#                 'rx': rvec[0][0][0],
+#                 'ry': rvec[0][0][1],
+#                 'rz': rvec[0][0][2]
+#         })
+#         socketio.emit('coordinates', jsonV)
 
 def stream_video():
         c = CardRecognition(0)

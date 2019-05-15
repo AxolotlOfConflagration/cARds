@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Model Preview</title>
+    <script src="https://cdn.babylonjs.com/babylon.max.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/master.css') }}">
+  </head>
+  <body>
+    <div id="container">
+        <div id="scene">
+            <canvas id="renderCanvas" class="display"></canvas>
+            <script type=text/javascript src="{{ url_for('static', filename = 'js/aruco.js') }}"></script>
+        </div>
+    </div>
+  </body>
+</html>
