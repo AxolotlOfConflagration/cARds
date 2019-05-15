@@ -1,10 +1,10 @@
-# from card_recognition.cam_stream import CardRecognition
+from card_recognition.cam_stream import CardRecognition
 from flask import Flask, render_template, send_from_directory
 import cv2 as cv
-# import numpy as np
+import numpy as np
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
-# import eventlet, base64, json, random, time
+import eventlet, base64, json, random, time
 # eventlet.monkey_patch()
 
 SLEEP_TIME = 0.00001
@@ -59,7 +59,7 @@ from itertools import cycle
 #         })
 #         socketio.emit('coordinates', jsonV)
 
-# def stream_video():
+def stream_video():
         c = CardRecognition(0)
         while True:
                 frame = c.create_cam_stream()
@@ -80,7 +80,7 @@ from itertools import cycle
                         socketio.emit('coordinates', jsonV)
                 eventlet.sleep(SLEEP_TIME)
 
-# eventlet.spawn(stream_video)
+eventlet.spawn(stream_video)
 # eventlet.spawn(send_coordinates)
 
 if __name__ == '__main__':
