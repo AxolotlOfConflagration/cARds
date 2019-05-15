@@ -50,6 +50,8 @@ class ModelPreview {
         mesh.rotationQuaternion = BABYLON.Quaternion.Identity();
         mesh.position.z = 10;
         mesh.position.y = meshId * 2;
+        var scalingFactor = new BABYLON.Vector3(3, 3, 3);
+        mesh.scaling = scalingFactor;
     }
 
     loadMeshes() {
