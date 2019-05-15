@@ -5,7 +5,7 @@ import numpy as np
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import eventlet, base64, json, random, time
-# eventlet.monkey_patch()
+eventlet.monkey_patch()
 
 SLEEP_TIME = 0.00001
 
@@ -25,9 +25,6 @@ def index():
 def serve_model(path):
         return send_from_directory('.', path)
 
-@app.route('/arucojs')
-def arucojs():
-        return render_template('aruco.html')
 
 from itertools import cycle
 
