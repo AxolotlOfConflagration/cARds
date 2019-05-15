@@ -49,9 +49,9 @@ class ModelPreview {
         let mesh = this.models[meshId];
         mesh.rotationQuaternion = BABYLON.Quaternion.Identity();
         mesh.position.z = 10;
-        mesh.position.y = meshId * 2;
-        var scalingFactor = new BABYLON.Vector3(3, 3, 3);
-        mesh.scaling = scalingFactor;
+        mesh.position.y = 0;
+        mesh.visibility = 0;
+        mesh.scaling = new BABYLON.Vector3(3, 3, 3);;
     }
 
     loadMeshes() {
@@ -61,7 +61,7 @@ class ModelPreview {
             "all_pokemons.babylon",
             this.scene,
             (meshes, particleSystems, skeletons) => {
-                this.scene.beginAnimation(skeletons[0], 0, 180, true, 1.0);
+                // this.scene.beginAnimation(skeletons[0], 0, 180, true, 1.0);
 
                 meshes.forEach(mesh => {
                     console.log(mesh.id)
@@ -92,7 +92,7 @@ class ModelPreview {
                             findMarkersInImage(videoTexture, this.models, this.framesSinceSeen, translateRotateMesh);
                         });
 
-                    }, 2000);
+                    }, 3000);
                 }, { maxWidth: 640 * 2, maxHeight: 480 * 2 });
             }
         );
@@ -171,8 +171,8 @@ function findMarkersInImage(videoTexture, meshes, framesSinceSeen, callback) {
 
         if (callback && mesh) {
             framesSinceSeen[id] = 0;
-            callback(id, framesSinceSeen[id], mesh, t, r);
             mesh.visibility = 1;
+            callback(id, framesSinceSeen[id], mesh, t, r);
         }
     }
 
