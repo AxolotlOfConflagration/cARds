@@ -14,8 +14,8 @@ class CardRecognition:
         self.charmander = 0
         self.pikachu = 2
         self.squirtle = 1
-
         self.path = os.path.realpath('card_recognition/CameraCalibration/img/*.bmp').replace("\\", "/")
+
 
     def create_cam_stream(self):
         self.success, self.frame = self.camera.read()
@@ -111,6 +111,7 @@ class CardRecognition:
             camera_matrix, dist_coeffs = self.get_camera_parameters_from_file()
         return  camera_matrix, dist_coeffs
     def get_corners_and_rortation_and_translation(self, frame):
+
         # objpoints, imgpoints, gray = self.calibrantion_cam_1()
         # camera_matrix, dist_coeffs = self.get_cam_matrix(objpoints, imgpoints, gray)
         camera_matrix, dist_coeffs = self.get_camera_parameters()
@@ -144,13 +145,16 @@ class CardRecognition:
             corners, ids = self.detect_aruco(frame)
 
             rvec, tvec = self.get_rotation_and_translation(corners,camera_matrix, dist_coeffs)
+
+
+
             try:
                 if len(rvec>0):
                     for i in range(0, len(rvec)):
                         cv2.aruco.drawAxis(frame, camera_matrix, dist_coeffs, rvec[i], tvec[i], 10)
-                    cv2.imshow('test2', frame)
             except:
                 pass
+            cv2.imshow('test2', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
