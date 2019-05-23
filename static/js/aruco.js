@@ -10,6 +10,10 @@ const BULBASAUR_ID = 3;
 class ModelPreview {
     constructor() {
         this.canvas = document.getElementById("renderCanvas");
+        
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+
         this.engine = new BABYLON.Engine(this.canvas, true, {
             preserveDrawingBuffer: true,
             stencil: true
@@ -17,6 +21,7 @@ class ModelPreview {
 
         this.scene = new BABYLON.Scene(this.engine);
         this.scene.clearColor = new BABYLON.Color4(0, 0, 0, 0);
+
         this.models = {};
         this.framesSinceSeen = {};
         this.fillScene();
@@ -51,7 +56,7 @@ class ModelPreview {
         mesh.position.z = 10;
         mesh.position.y = 0;
         mesh.visibility = 0;
-        mesh.scaling = new BABYLON.Vector3(3, 3, 3);;
+        mesh.scaling = new BABYLON.Vector3(2, 2, 2);;
     }
 
     loadMeshes() {
