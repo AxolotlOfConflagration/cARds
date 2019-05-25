@@ -48,6 +48,20 @@ class ModelPreview {
         let material = new BABYLON.StandardMaterial("material", this.scene);
         feed.material = material;
         this.material = material;
+
+        BABYLON.VideoTexture.CreateFromWebCam(this.scene, (videoTexture) => {
+            this.material.diffuseTexture = videoTexture;
+
+            ensureAruco();
+            setTimeout(() => {
+                Module._reset();
+
+                this.scene.onAfterRenderObservable.add(() => {
+                    findMarkersInImage(videoTexture, this.models, this.framesSinceSeen, translateRotateMesh);
+                });
+
+            }, 3000);
+        }, { maxWidth: 640 * 2, maxHeight: 480 * 2 });
     }
 
     prepareMesh(meshId) {
@@ -59,15 +73,15 @@ class ModelPreview {
         mesh.scaling = new BABYLON.Vector3(2, 2, 2);;
     }
 
-    loadMeshes() {
+    loadMesh(path) {
         BABYLON.SceneLoader.ImportMesh(
             "",
             "static/models/", //TODO change path
-            "all_pokemons.babylon",
+            path,
+            // "suzane_anim.babylon",
             this.scene,
             (meshes, particleSystems, skeletons) => {
                 // this.scene.beginAnimation(skeletons[0], 0, 180, true, 1.0);
-
                 meshes.forEach(mesh => {
                     console.log(mesh.id)
                     switch (mesh.id) {
@@ -85,22 +99,19 @@ class ModelPreview {
                             break;
                     }
                 });
-
-                BABYLON.VideoTexture.CreateFromWebCam(this.scene, (videoTexture) => {
-                    this.material.diffuseTexture = videoTexture;
-
-                    ensureAruco();
-                    setTimeout(() => {
-                        Module._reset();
-
-                        this.scene.onAfterRenderObservable.add(() => {
-                            findMarkersInImage(videoTexture, this.models, this.framesSinceSeen, translateRotateMesh);
-                        });
-
-                    }, 3000);
-                }, { maxWidth: 640 * 2, maxHeight: 480 * 2 });
+                
+                skeletons.forEach(skeleton => {
+                    console.log(skeleton);
+                    this.scene.beginAnimation(skeleton, 0, 290, true, 1.0);
+                });
             }
         );
+    }
+
+    loadMeshes() {
+        this.loadMesh("all_pokemons.babylon");
+        this.loadMesh("bulbasaur.babylon");
+        this.loadMesh("charmander_2.babylon");
     }
 
     render() {
