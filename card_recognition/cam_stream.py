@@ -117,20 +117,6 @@ class CardRecognition:
 
         return corners, rvec, tvec, ids
 
-    def test_cor_ror_tran(self):
-        while True:
-            frame = self.create_cam_stream()
-            corners, rvec, tvec, ids = self.get_corners_and_rortation_and_translation(frame)
-            print("corners")
-            print(corners)
-            print("rvec")
-            print(rvec)
-            print("tvec")
-            print(tvec)
-            print("ids")
-            print(ids)
-
-
     def show_asix(self):
 
         # objpoints, imgpoints, gray = self.calibrantion_cam_1()
