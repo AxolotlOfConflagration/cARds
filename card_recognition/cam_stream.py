@@ -10,10 +10,6 @@ import json
 class CardRecognition:
     def __init__(self, number):
         self.camera = cv2.VideoCapture(number)
-        self.bulbasaur = 3
-        self.charmander = 0
-        self.pikachu = 2
-        self.squirtle = 1
         self.path = os.path.realpath('card_recognition/CameraCalibration/img/*.bmp').replace("\\", "/")
 
 
