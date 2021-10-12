@@ -9,7 +9,7 @@ Jinja2==2.10.1
 MarkupSafe==1.1.1
 monotonic==1.5
 numpy==1.16.2
-opencv-contrib-python==3.2.0.7
+opencv-contrib-python==4.2.0.32
 opencv-python==4.0.0.21
 python-engineio==3.9.0
 python-socketio==3.1.2
